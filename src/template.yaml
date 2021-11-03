@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  DumpLogs:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.object_access_logging_lambda
+      Runtime: python3.9
+      CodeUri: .
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Role: 'arn:aws:iam::557161229620:role/service-role/py-test-role-31f03mdu'
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: Bucket1
+            Events:
+              - 's3:ObjectCreated:*'
+  DeleteUnaccessedS3objects:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.delete_unused_s3objects
+      Runtime: python3.9
+      CodeUri: .
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Role: 'arn:aws:iam::557161229620:role/service-role/py-test-role-31f03mdu'
+      Events:
+        Schedule1:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 9 * * ? *)
+
+
+  DeleteUnusedS3objects:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.delete_unaccessed_s3objects
+      Runtime: python3.9
+      CodeUri: .
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Role: 'arn:aws:iam::557161229620:role/service-role/py-test-role-31f03mdu'
+      Events:
+        Schedule1:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 0 15 * ? *)
+  Bucket1:
+    Type: 'AWS::S3::Bucket'

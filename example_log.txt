@@ -1,0 +1,6 @@
+INFO:root:Started at: 2021-11-03 13:22:08.424386
+INFO:root:Started at: 2021-11-03 13:22:37.492554
+ERROR:root:Error
+ERROR:root:Error
+ERROR:root:Error
+ERROR:obj:Error
