@@ -7,7 +7,7 @@ class S3Access:
       def __init__(self, bucket_name):
             self.bucket_name = bucket_name
             self.s3 = boto3.resource('s3',
-                                     region_name='us-east-1',
+                                     region_name=os.environ['AWS_REGION'],
                                      aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
                                      aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'])
             self.bucket = self.s3.Bucket(self.bucket_name)

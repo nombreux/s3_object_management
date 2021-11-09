@@ -1,5 +1,4 @@
-import boto3
-import json
+
 import logging
 from aws_access.s3_access import S3Access
 from buisness_logic.dump_logs import DumpLogs
