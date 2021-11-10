@@ -17,6 +17,7 @@ class ExpiredObjects:
             self.dynamoDbTable = DynamoDbAccess().get_table_access(os.environ['OBJECT_ACCESS_TABLE_NAME'])
             self.expired_object_dict = self.list_expired_objects()
             self.unused_object_dict = self.list_unused_objects()
+            self.archival_bucket=os.environ['S3_ARCHIVAL_BUCKET_NAME']
 
       def list_expired_objects(self):
             expiary_date = datetime.datetime.now() - datetime.timedelta(days=int(self.days))
@@ -47,9 +48,17 @@ class ExpiredObjects:
                   if(self.expired_object_dict):
                         for bucket_name, expired_object_list in self.expired_object_dict.items():
                               s3_access = S3Access(bucket_name)
+                              copy_res=s3_access.copy_files(expired_object_list,self.archival_bucket)
+                              if(copy_res):
+                                    self.logger.info("Copied {0} to bucket: {1}".format(expired_object_list, self.archival_bucket))
+                              else:
+                                    self.logger.error("Error in copying files to archive bucket")
+
                               res=s3_access.delete_files(expired_object_list)
                               if(res):
                                     self.logger.info("Deleted {0} from bucket: {1}".format(expired_object_list, bucket_name))
+                              else:
+                                    self.logger.error("Error in deleting files from bucket")
                   else:
                         self.logger.info("No expired objects found")
             except Exception as e:
@@ -109,6 +118,11 @@ class ExpiredObjects:
                   if(self.unused_object_dict):
                         for bucket_name, unused_object_list in self.unused_object_dict.items():
                               s3_access = S3Access(bucket_name)
+                              copy_res=s3_access.copy_files(unused_object_list,self.archival_bucket)
+                              if(copy_res):
+                                    self.logger.info("Copied {0} to bucket: {1}".format(unused_object_list, self.archival_bucket))
+                              else:
+                                    self.logger.error("Error in copying files to archive bucket")
                               res=s3_access.delete_files(unused_object_list)
                               if(res):
                                     self.logger.info("Deleted {0} from bucket: {1}".format(unused_object_list, bucket_name))

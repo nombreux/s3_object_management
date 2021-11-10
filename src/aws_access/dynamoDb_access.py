@@ -8,9 +8,9 @@ from boto3.dynamodb.conditions import Key, Attr
 class DynamoDbAccess:
       def __init__(self):
             
-            self.dynamodb = boto3.resource('dynamodb',aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
-                                          aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
-                                          region_name='us-east-1')
+            self.dynamodb = boto3.resource('dynamodb',aws_access_key_id=os.environ['AWSACCESS_KEY_ID'],
+                                          aws_secret_access_key=os.environ['AWSSECRET_ACCESS_KEY'],
+                                          region_name=os.environ['AWS_REGION'])
             
             self.logger=logging.getLogger('DynamoDbAccess')
             
