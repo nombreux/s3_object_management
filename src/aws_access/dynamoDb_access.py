@@ -41,8 +41,9 @@ class DynamoDbAccess:
 
       def query_data(self, key, value):
             try:
-                  response = self.table.query(
-                        KeyConditionExpression=Key(key).eq(value) 
+                  response = self.table.scan(
+                        FilterExpression=Attr(key).eq(value)
+
                   )
                   return response['Items']
             except ClientError as e:

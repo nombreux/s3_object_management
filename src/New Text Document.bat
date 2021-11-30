@@ -1,1 +1,0 @@
-pip install -r %cd%/requirements.txt -t %cd%
