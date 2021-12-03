@@ -8,9 +8,9 @@ class S3Access:
       def __init__(self, bucket_name):
             self.bucket_name = bucket_name
             self.s3 = boto3.resource('s3',
-                                     region_name= "ap-south-1" ,   #os.environ['AWS_REGION'],
-                                     aws_access_key_id= 'AKIAYDOLFVU2IN6SOCGC' ,#os.environ['AWSACCESS_KEY_ID'],
-                                     aws_secret_access_key= "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"   #os.environ['AWSSECRET_ACCESS_KEY']
+                                     region_name= os.environ['AWS_REGION'],
+                                     aws_access_key_id= os.environ['AWSACCESS_KEY_ID'],
+                                     aws_secret_access_key= os.environ['AWSSECRET_ACCESS_KEY']
                                           )
 
 
