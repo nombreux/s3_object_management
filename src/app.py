@@ -1,5 +1,5 @@
-
 import logging
+import os
 from aws_access.s3_access import S3Access
 from buisness_logic.dump_logs import DumpLogs
 from buisness_logic.get_expired_objects import ExpiredObjects
@@ -45,3 +45,7 @@ def delete_unused_s3objects(event, context):
       logger.info("Finished")
       
       return event
+
+
+
+

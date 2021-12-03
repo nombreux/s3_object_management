@@ -2,14 +2,18 @@ import boto3
 import os
 import sys
 import logging
+from buisness_logic.util import parse_urlstr
 
 class S3Access:
       def __init__(self, bucket_name):
             self.bucket_name = bucket_name
             self.s3 = boto3.resource('s3',
-                                     region_name=os.environ['AWS_REGION'],
-                                     aws_access_key_id=os.environ['AWSACCESS_KEY_ID'],
-                                     aws_secret_access_key=os.environ['AWSSECRET_ACCESS_KEY'])
+                                     region_name= "ap-south-1" ,   #os.environ['AWS_REGION'],
+                                     aws_access_key_id= 'AKIAYDOLFVU2IN6SOCGC' ,#os.environ['AWSACCESS_KEY_ID'],
+                                     aws_secret_access_key= "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"   #os.environ['AWSSECRET_ACCESS_KEY']
+                                          )
+
+
             self.bucket = self.s3.Bucket(self.bucket_name)
             self.logger=logging.getLogger(__name__)
 
@@ -17,7 +21,7 @@ class S3Access:
       #gets the contents of a file in the bucket
       def get_file(self, file_name):
             try:
-                  obj = self.bucket.Object(file_name)
+                  obj = self.bucket.Object(parse_urlstr(file_name))
                   return obj.get()['Body'].read().decode('utf-8')
             except Exception as e:
                   logging.error(e)
@@ -28,7 +32,8 @@ class S3Access:
       def delete_files(self, file_list):
             try:
                   for file in file_list:
-                        self.bucket.Object(file).delete()
+                        file=parse_urlstr(file)
+                        self.bucket.Object(parse_urlstr(file)).delete()
                   return True
             except Exception as e:
                   logging.error(e)
@@ -48,11 +53,15 @@ class S3Access:
       def copy_files(self, file_names, new_bucket_name):
             try:
                   for file_name in file_names:
-                        self.s3.Bucket(new_bucket_name).copy({
-                              'Bucket': self.bucket_name,
-                              'Key': file_name
-                        }, file_name)
-                        self.logger.info("Copied file: {}".format(file_name))
+                        file_name=parse_urlstr(file_name)
+                        try:
+                              self.s3.Bucket(new_bucket_name).copy({
+                                    'Bucket': self.bucket_name,
+                                    'Key': parse_urlstr(file_name)
+                              }, file_name)
+                              self.logger.info("Copied file: {}".format(file_name))
+                        except Exception as e:
+                              self.logger.error("Failed to copy file: {}. Error: {}".format(file_name, e))
                   return True
             except Exception as e:
                   self.logger.error(e)

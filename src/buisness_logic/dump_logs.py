@@ -1,7 +1,8 @@
 import os
 import logging
-from log_parser import LogParser
+from buisness_logic.log_parser import LogParser
 from aws_access.dynamoDb_access import DynamoDbAccess
+
 
 class DumpLogs:
       def __init__(self, raw_logs):

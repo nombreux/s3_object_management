@@ -1,7 +1,16 @@
-notebook.ipynb
 src_1
 Lib
 Scripts
 Include
 build
 build.toml
+tests
+*.ipynb
+test.py
+six.py
+script.py
+src\test.py
+example_log.txt
+local_test.py
+.vscode
+*.pyc

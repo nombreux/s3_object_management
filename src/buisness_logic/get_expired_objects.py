@@ -7,6 +7,7 @@ import sys
 import time
 from aws_access.dynamoDb_access import DynamoDbAccess
 from aws_access.s3_access import S3Access
+from buisness_logic.util import parse_urlstr 
 
 
 
@@ -24,14 +25,15 @@ class ExpiredObjects:
             expiary_date = expiary_date.isoformat()  #.strftime('%Y-%m-%d')
             self.logger.info("Expiry date is: {}".format(expiary_date))
             if(self.dynamoDbTable):
-                  expired_objects = self.dynamoDbTable.query_data(key='last_access_dt', value=expiary_date)
+                  expired_objects = self.dynamoDbTable.query_data(key='last_accessed_date', value=expiary_date)
                   self.logger.info("Expired objects are: {}".format(expired_objects))
                   expired_object_details:Dict[str,list[str]] = {}
             
                   if(expired_objects):
                         for expired_object in expired_objects:
+                        
                               try:
-                                    expired_object_details[str(expired_object['bucket_name'])].append(str(expired_object['object_key'])) 
+                                    expired_object_details[str(expired_object['bucket_name'])].append((str(expired_object['object_key']))) 
                                     #note:bucket_name and object_key are partition and sort keys in dynamoDb table respectively
                               except Exception as e:
                                     expired_object_details[str(expired_object['bucket_name'])] = [str(expired_object['object_key'])]

@@ -42,7 +42,7 @@ class DynamoDbAccess:
       def query_data(self, key, value):
             try:
                   response = self.table.scan(
-                        FilterExpression=Attr(key).eq(value)
+                        FilterExpression=Attr(key).lt(value)
 
                   )
                   return response['Items']
